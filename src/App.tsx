@@ -1,10 +1,15 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
+import Navbar from './layoutComponents/Navbar'
 
 function App() {
 
   return (
     <>
-      <h1>Hello from new project connect router</h1>
+      <div className='w-full m-auto'>
+        <Navbar />
+        <Outlet />
+      </div>
     </>
   )
 }
