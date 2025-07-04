@@ -4,7 +4,7 @@ function App() {
 
   return (
     <>
-      <h1>Hello from new project</h1>
+      <h1>Hello from new project connect router</h1>
     </>
   )
 }
