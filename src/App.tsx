@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import './App.css'
 import Navbar from './layoutComponents/Navbar'
+import Footer from './layoutComponents/Footer'
 
 function App() {
 
@@ -8,7 +9,10 @@ function App() {
     <>
       <div className='w-full m-auto'>
         <Navbar />
-        <Outlet />
+        <div className='min-h-[70vh]'>
+          <Outlet />
+        </div>
+        <Footer />
       </div>
     </>
   )
