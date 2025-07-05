@@ -4,6 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { useGetBooksQuery } from "@/redux/api/baseApi";
+import Loader from "@/layoutComponents/Loader";
+import { Link } from "react-router-dom";
 
 export default function AllBooks() {
 
@@ -12,7 +14,7 @@ export default function AllBooks() {
   const [page, setPage] = useState<number>(1);
   const limit = 10;
 
-  const { data, isLoading, isError } = useGetBooksQuery({
+  const { data, isLoading } = useGetBooksQuery({
     sortBy,
     sort: sortOrder,
     page,
@@ -22,8 +24,7 @@ export default function AllBooks() {
 
   const columns = ["Sl", "Title", "Author", "Genre", "ISBN", "Copies", "Description", "Status", "Actions"];
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading data.</p>;
+  if (isLoading) return <Loader /> ;
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
@@ -83,7 +84,7 @@ export default function AllBooks() {
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Button size="sm" className="bg-blue-500">Edit</Button>
+                  <Link to={`/books/${book._id}`}><Button size="sm" className="bg-blue-500 cursor-pointer">Edit</Button></Link>
                   <Button size="sm" variant="destructive">Delete</Button>
                   <Button size="sm" disabled={!book.available}>Borrow</Button>
                 </div>
