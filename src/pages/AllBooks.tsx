@@ -3,28 +3,42 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { useGetBooksQuery } from "@/redux/api/baseApi";
+import { useDeleteBookMutation, useGetBooksQuery } from "@/redux/api/baseApi";
 import Loader from "@/layoutComponents/Loader";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function AllBooks() {
 
   const [sortBy, setSortBy] = useState<string>("title");
-  const [sortOrder, setSortOrder] = useState<string>("asc"); // or "desc"
+  const [sortOrder, setSortOrder] = useState<string>("asc");
   const [page, setPage] = useState<number>(1);
   const limit = 10;
 
+  // Get all books data for the table
   const { data, isLoading } = useGetBooksQuery({
     sortBy,
     sort: sortOrder,
     page,
     limit
   });
-  // console.log(data)
+
+  // Delete Mutation for delete a book
+  const [deleteBook] = useDeleteBookMutation()
+  // console.log(isSuccess);
+  const deleteBookSubmit = async (bookId: any) => {
+    try {
+      await deleteBook(bookId).unwrap();
+      toast.success('Book Deleted Successfully');
+    } catch (error) {
+      toast.error('Something went wrong');
+      console.error("Delete failed:", error);
+    }
+  };
 
   const columns = ["Sl", "Title", "Author", "Genre", "ISBN", "Copies", "Description", "Status", "Actions"];
 
-  if (isLoading) return <Loader /> ;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
@@ -78,15 +92,15 @@ export default function AllBooks() {
               <TableCell>{book.copies}</TableCell>
               <TableCell>{book.description}</TableCell>
               <TableCell>
-                <span className={`text-sm px-2 py-1 rounded-full ${book.available ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                  {book.available ? "Available" : "Unavailable"}
+                <span className={`text-sm px-2 py-1 rounded-full ${book.copies > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                  {book.copies > 0 ? "Available" : "Unavailable"}
                 </span>
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Link to={`/books/${book._id}`}><Button size="sm" className="bg-blue-500 cursor-pointer">Edit</Button></Link>
-                  <Button size="sm" variant="destructive">Delete</Button>
-                  <Button size="sm" disabled={!book.available}>Borrow</Button>
+                  <Link to={`/books/${book._id}`}><Button size="sm" className="bg-yellow-500 cursor-pointer">Edit</Button></Link>
+                  <Button onClick={() => deleteBookSubmit(book._id)} className="cursor-pointer" size="sm" variant="destructive">Delete</Button>
+                  <Button size="sm" disabled={!book.copies}>Borrow</Button>
                 </div>
               </TableCell>
             </TableRow>

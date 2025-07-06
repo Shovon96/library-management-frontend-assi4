@@ -19,10 +19,10 @@ import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
 
 export default function EditBookForm() {
-      const { id } = useParams<{ id: string }>();
-      const { data: book, isLoading: loadingBook } = useGetBookQuery(id!, {refetchOnMountOrArgChange: true, refetchOnReconnect: true});
-      const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
-      const navigate = useNavigate()
+    const { id } = useParams<{ id: string }>();
+    const { data: book, isLoading: loadingBook } = useGetBookQuery(id!, { refetchOnMountOrArgChange: true, refetchOnReconnect: true });
+    const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
+    const navigate = useNavigate()
 
     // const { id } = useParams<"id">();
     // const { data: book } = useGetBookQuery(id!)
@@ -42,108 +42,111 @@ export default function EditBookForm() {
     if (loadingBook) return <Loader />;
     if (!book) return <p>Book not found!</p>;
 
-  const onSubmit = async (data: Partial<IBook>) => {
-    try {
-      await updateBook({ id: id!, bookData: data }).unwrap();
-      toast.success('Book Successfully Updated')
-      navigate(-1);
-    } catch (error) {
-        toast.error('Update Request Failed!')
-      console.error("Update failed:", error);
-    }
-  };
+    const onSubmit = async (data: Partial<IBook>) => {
+        try {
+            await updateBook({ id: id!, bookData: data }).unwrap();
+            toast.success('Book Successfully Updated')
+            navigate(-1);
+        } catch (error) {
+            toast.error('Update Request Failed!')
+            console.error("Update failed:", error);
+        }
+    };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-lg mx-auto p-4">
-                <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Title" {...field} defaultValue={book?.data?.title}/>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+        <>
+        <h1 className="text-2xl font-bold my-5 text-center">Update <span className="text-blue-600">{book?.data?.title}</span> Book</h1>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-lg mx-auto p-4">
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Title</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Title" {...field} defaultValue={book?.data?.title} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="author"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Author</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Author" {...field} defaultValue={book?.data?.author} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="author"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Author</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Author" {...field} defaultValue={book?.data?.author} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="isbn"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>ISBN</FormLabel>
-                            <FormControl>
-                                <Input placeholder="ISBN" {...field} defaultValue={book?.data?.isbn} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="isbn"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>ISBN</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="ISBN" {...field} defaultValue={book?.data?.isbn} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="genre"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Genre</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Genre" {...field} defaultValue={book?.data?.genre} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="genre"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Genre</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Genre" {...field} defaultValue={book?.data?.genre} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="copies"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Copies</FormLabel>
-                            <FormControl>
-                                <Input type="number" placeholder="Copies" {...field} defaultValue={book?.data?.copies} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="copies"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Copies</FormLabel>
+                                <FormControl>
+                                    <Input type="number" placeholder="Copies" {...field} defaultValue={book?.data?.copies} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <Textarea placeholder="Description" {...field} defaultValue={book?.data?.description} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Description" {...field} defaultValue={book?.data?.description} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <Button type="submit" disabled={isUpdating} className="w-full">
-                    {isUpdating ? "Saving..." : "Update Book"}
-                </Button>
-            </form>
-        </Form>
+                    <Button type="submit" disabled={isUpdating} className="w-full bg-blue-500 cursor-pointer">
+                        {isUpdating ? "Saving..." : "Update Book"}
+                    </Button>
+                </form>
+            </Form>
+        </>
     );
 }

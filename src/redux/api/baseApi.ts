@@ -8,6 +8,7 @@ export const baseApi = createApi({
     }),
     tagTypes: ['book'],
     endpoints: (builder) => ({
+        // Get All books
         getBooks: builder.query({
             query: ({ sortBy, sort, page = 1, limit = 10 }) => {
                 const params = new URLSearchParams();
@@ -20,6 +21,7 @@ export const baseApi = createApi({
             },
             providesTags: ['book']
         }),
+        // Create New book query request
         createBook: builder.mutation({
             query: (bookData) => ({
                 url: '/books',
@@ -28,10 +30,12 @@ export const baseApi = createApi({
             }),
             invalidatesTags: ['book']
         }),
+        // Get Specific book
         getBook: builder.query({
             query: (id) => `/books/${id}`,
             providesTags: (id) => [{ type: "book", id }],
         }),
+        // Update Specific book query request
         updateBook: builder.mutation({
             query: ({ id, bookData }) => ({
                 url: `/books/${id}`,
@@ -40,7 +44,23 @@ export const baseApi = createApi({
             }),
             invalidatesTags: ['book']
         }),
+        // Delete Specific book query request
+        deleteBook: builder.mutation<{ success: boolean; id: number }, number>({
+            query(id) {
+                return {
+                    url: `/books/${id}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: ['book']
+        }),
     }),
 })
 
-export const { useGetBooksQuery, useCreateBookMutation, useUpdateBookMutation, useGetBookQuery } = baseApi
+export const {
+    useGetBooksQuery,
+    useCreateBookMutation,
+    useUpdateBookMutation,
+    useGetBookQuery,
+    useDeleteBookMutation
+} = baseApi
