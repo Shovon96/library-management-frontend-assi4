@@ -1,4 +1,5 @@
 import App from "@/App";
+import AddBooks from "@/pages/AddBook";
 import AllBooks from "@/pages/AllBooks";
 import ErrorRouter from "@/pages/errorPage/ErrorRouter";
 import Home from "@/pages/Home";
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />
+      },
+      {
+        path: "/create-book",
+        element: <AddBooks />
       },
       {
         path: "/books",

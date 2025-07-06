@@ -16,6 +16,7 @@ export interface IBook {
 
 //  Zod Schema form validation for default data
 export const bookZodSchema = z.object({
+    _id: z.string().optional(),
     title: z.string().min(1, "Title is required"),
     author: z.string().min(1, "Author is required"),
     genre: z.string().min(1, "Genre is required"),
