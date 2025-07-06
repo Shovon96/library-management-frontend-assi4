@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetBookQuery } from "@/redux/api/baseApi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,11 +16,13 @@ import { Input } from "@/components/ui/input";
 import Loader from "@/layoutComponents/Loader";
 import { bookZodSchema, type IBook } from "@/model/bookModel";
 import { Textarea } from "@/components/ui/textarea";
+import toast from "react-hot-toast";
 
 export default function EditBookForm() {
       const { id } = useParams<{ id: string }>();
-      const { data: book, isLoading: loadingBook } = useGetBookQuery(id!);
-      const [updateBook, { isLoading: isUpdating, isSuccess }] = useUpdateBookMutation();
+      const { data: book, isLoading: loadingBook } = useGetBookQuery(id!, {refetchOnMountOrArgChange: true, refetchOnReconnect: true});
+      const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
+      const navigate = useNavigate()
 
     // const { id } = useParams<"id">();
     // const { data: book } = useGetBookQuery(id!)
@@ -40,9 +42,16 @@ export default function EditBookForm() {
     if (loadingBook) return <Loader />;
     if (!book) return <p>Book not found!</p>;
 
-    const onSubmit = async (data: Partial<IBook>) => {
-        await updateBook({ id: book._id, bookData: data });
-    };
+  const onSubmit = async (data: Partial<IBook>) => {
+    try {
+      await updateBook({ id: id!, bookData: data }).unwrap();
+      toast.success('Book Successfully Updated')
+      navigate(-1);
+    } catch (error) {
+        toast.error('Update Request Failed!')
+      console.error("Update failed:", error);
+    }
+  };
 
     return (
         <Form {...form}>
@@ -134,8 +143,6 @@ export default function EditBookForm() {
                 <Button type="submit" disabled={isUpdating} className="w-full">
                     {isUpdating ? "Saving..." : "Update Book"}
                 </Button>
-
-                {isSuccess && <p className="text-green-600 mt-2">✅ Updated successfully!</p>}
             </form>
         </Form>
     );

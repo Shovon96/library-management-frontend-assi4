@@ -38,7 +38,7 @@ export const baseApi = createApi({
                 method: 'PATCH',
                 body: bookData,
             }),
-            // invalidatesTags: ['book']
+            invalidatesTags: ['book']
         }),
     }),
 })
