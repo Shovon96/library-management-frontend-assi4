@@ -23,4 +23,6 @@ export const bookZodSchema = z.object({
     isbn: z.string().min(1, "ISBN is required"),
     description: z.string().optional(),
     copies: z.coerce.number().min(1, "Minimum 1 copy required"),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional()
 });

@@ -7,6 +7,7 @@ import { useDeleteBookMutation, useGetBooksQuery } from "@/redux/api/baseApi";
 import Loader from "@/layoutComponents/Loader";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import BorrowModal from "@/layoutComponents/BorrowModal";
 
 export default function AllBooks() {
 
@@ -39,6 +40,19 @@ export default function AllBooks() {
   const columns = ["Sl", "Title", "Author", "Genre", "ISBN", "Copies", "Description", "Status", "Actions"];
 
   if (isLoading) return <Loader />;
+
+  // For Modal open
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<{ id: string; availableQuantity: number } | null>(null);
+
+  const handleBorrowRequest = (data: { quantity: number; date: string }) => {
+    setIsModalOpen(false);
+  };
+
+  const openModal = (book: { _id: string; copies: number }) => {
+    setSelectedBook({ id: book._id, availableQuantity: book.copies });
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
@@ -100,7 +114,19 @@ export default function AllBooks() {
                 <div className="flex gap-2">
                   <Link to={`/books/${book._id}`}><Button size="sm" className="bg-yellow-500 cursor-pointer">Edit</Button></Link>
                   <Button onClick={() => deleteBookSubmit(book._id)} className="cursor-pointer" size="sm" variant="destructive">Delete</Button>
-                  <Button size="sm" disabled={!book.copies}>Borrow</Button>
+                  {/* <Button size="sm" disabled={!book.copies}>Borrow</Button> */}
+                  <div>
+                    <Button onClick={() => openModal(book)}>Borrow</Button>
+
+                    {selectedBook && (
+                      <BorrowModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onSubmit={handleBorrowRequest}
+                        availableQuantity={selectedBook.availableQuantity}
+                      />
+                    )}
+                  </div>
                 </div>
               </TableCell>
             </TableRow>
