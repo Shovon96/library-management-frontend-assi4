@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useBorrowBookMutation } from "@/redux/api/borrowApi";
 
 type BorrowFormData = {
   quantity: number;
@@ -14,6 +15,7 @@ type BorrowModalProps = {
   onClose: () => void;
   onSubmit: (data: BorrowFormData) => void;
   availableQuantity: number;
+  book: string,
 };
 
 export default function BorrowModal({
@@ -21,17 +23,31 @@ export default function BorrowModal({
   onClose,
   onSubmit,
   availableQuantity,
+  book,
 }: BorrowModalProps) {
   const { register, handleSubmit, reset } = useForm<BorrowFormData>();
+  const [borrowBook, { isLoading }] = useBorrowBookMutation();
 
-  const submitHandler = (data: BorrowFormData) => {
+  const submitHandler = async (data: BorrowFormData) => {
     if (data.quantity > availableQuantity) {
-      toast.error(`Only ${availableQuantity} copies available.`)
+      toast.error(`Only ${availableQuantity} copies available.`);
       return;
     }
-    onSubmit(data);
-    reset();
-    onClose();
+
+    try {
+      await borrowBook({
+        book,
+        quantity: data.quantity,
+        dueDate: data.date,
+      }).unwrap();
+      toast.success("Book borrowed successfully!");
+      onSubmit(data)
+      reset();
+      onClose();
+    } catch (error: any) {
+      console.error("Borrow failed", error);
+      toast.error("Failed to borrow book!");
+    }
   };
   // console.log("Available Quantity inside modal:", availableQuantity);
 
@@ -61,10 +77,10 @@ export default function BorrowModal({
           </div>
 
           <DialogFooter>
-            <Button variant="outline" type="button" onClick={onClose}>
+            <Button className="cursor-pointer" variant="outline" type="button" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Request</Button>
+            <Button className="cursor-pointer bg-blue-500" type="submit">Request</Button>
           </DialogFooter>
         </form>
       </DialogContent>

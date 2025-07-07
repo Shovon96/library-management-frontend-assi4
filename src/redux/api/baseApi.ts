@@ -6,7 +6,7 @@ export const baseApi = createApi({
         baseUrl: 'https://library-management-liard-six.vercel.app/api'
         // baseUrl: 'http://localhost:5000/api'
     }),
-    tagTypes: ['book'],
+    tagTypes: ['book', 'borrow'],
     endpoints: (builder) => ({
         // Get All books
         getBooks: builder.query({
@@ -19,7 +19,7 @@ export const baseApi = createApi({
 
                 return `/books?${params.toString()}`;
             },
-            providesTags: ['book']
+            providesTags: ['book', 'borrow']
         }),
         // Create New book query request
         createBook: builder.mutation({
@@ -28,7 +28,7 @@ export const baseApi = createApi({
                 method: 'POST',
                 body: bookData
             }),
-            invalidatesTags: ['book']
+            invalidatesTags: ['book', 'borrow']
         }),
         // Get Specific book
         getBook: builder.query({
@@ -42,7 +42,7 @@ export const baseApi = createApi({
                 method: 'PATCH',
                 body: bookData,
             }),
-            invalidatesTags: ['book']
+            invalidatesTags: ['book', 'borrow']
         }),
         // Delete Specific book query request
         deleteBook: builder.mutation<{ success: boolean; id: number }, number>({
@@ -52,7 +52,7 @@ export const baseApi = createApi({
                     method: 'DELETE',
                 }
             },
-            invalidatesTags: ['book']
+            invalidatesTags: ['book', 'borrow']
         }),
     }),
 })

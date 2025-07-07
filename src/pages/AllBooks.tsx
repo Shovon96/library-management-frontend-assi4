@@ -15,15 +15,15 @@ export default function AllBooks() {
   const [sortOrder, setSortOrder] = useState<string>("asc");
   const [page, setPage] = useState<number>(1);
   const limit = 10;
-
+  
   // Get all books data for the table
-  const { data, isLoading } = useGetBooksQuery({
+  const { data, isLoading, refetch } = useGetBooksQuery({
     sortBy,
     sort: sortOrder,
     page,
     limit
   });
-
+  
   // Delete Mutation for delete a book
   const [deleteBook] = useDeleteBookMutation()
   // console.log(isSuccess);
@@ -36,24 +36,25 @@ export default function AllBooks() {
       console.error("Delete failed:", error);
     }
   };
-
+  
   const columns = ["Sl", "Title", "Author", "Genre", "ISBN", "Copies", "Description", "Status", "Actions"];
-
-  if (isLoading) return <Loader />;
-
+  
+  
   // For Modal open
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<{ id: string; availableQuantity: number } | null>(null);
-
+  
   const handleBorrowRequest = (data: { quantity: number; date: string }) => {
     setIsModalOpen(false);
   };
-
+  
   const openModal = (book: { _id: string; copies: number }) => {
     setSelectedBook({ id: book._id, availableQuantity: book.copies });
     setIsModalOpen(true);
   };
-
+  
+  if (isLoading) return <Loader />;
+  
   return (
     <div className="p-4 bg-white rounded-lg shadow">
       {/* sorting */}
@@ -116,16 +117,17 @@ export default function AllBooks() {
                   <Button onClick={() => deleteBookSubmit(book._id)} className="cursor-pointer" size="sm" variant="destructive">Delete</Button>
                   {/* <Button size="sm" disabled={!book.copies}>Borrow</Button> */}
                   <div>
-                    <Button onClick={() => openModal(book)}>Borrow</Button>
+                    <Button className="cursor-pointer bg-blue-500" onClick={() => openModal(book)}>Borrow</Button>
 
-                    {selectedBook && (
+                    {/* {selectedBook && (
                       <BorrowModal
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
                         onSubmit={handleBorrowRequest}
                         availableQuantity={selectedBook.availableQuantity}
+                        book={book?._id}
                       />
-                    )}
+                    )} */}
                   </div>
                 </div>
               </TableCell>
@@ -151,6 +153,18 @@ export default function AllBooks() {
           Next
         </Button>
       </div>
+      {selectedBook && (
+        <BorrowModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={(borrowData) => {
+            handleBorrowRequest(borrowData);
+            refetch(); // ✅ borrow এর পর list refresh
+          }}
+          availableQuantity={selectedBook.availableQuantity} // ✅ ঠিক মত pass holo
+          book={selectedBook.id} // ✅ ঠিক মত pass holo
+        />
+      )}
     </div>
   );
 }
