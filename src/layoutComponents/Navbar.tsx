@@ -18,7 +18,7 @@ export default function Navbar() {
                                 <Link to={"/create-book"} className="block py-2 px-3 text-white rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-500 md:p-0 dark:text-white md:dark:hover:text-orange-500 dark:hover:bg-white dark:hover:text-white md:dark:hover:bg-transparent">+Add Book</Link>
                             </li>
                             <li>
-                                <Link to={"/borrow-summary"} className="block py-2 px-3 text-white rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-500 md:p-0 dark:text-white md:dark:hover:text-orange-500 dark:hover:bg-white dark:hover:text-white md:dark:hover:bg-transparent">Book Summary</Link>
+                                <Link to={"/borrow-summary"} className="block py-2 px-3 text-white rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-orange-500 md:p-0 dark:text-white md:dark:hover:text-orange-500 dark:hover:bg-white dark:hover:text-white md:dark:hover:bg-transparent">Borrow Summary</Link>
                             </li>
                         </ul>
                         <div>

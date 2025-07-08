@@ -8,9 +8,13 @@ interface BorrowPayload {
 }
 
 interface BorrowSummary {
-    title: string;
-    isbn: string;
+  data: {
     totalQuantity: number;
+    book: {
+      title: string;
+      isbn: string;
+    };
+  }[];
 }
 
 export const borrowApi = createApi({
@@ -34,7 +38,12 @@ export const borrowApi = createApi({
             }),
             invalidatesTags: ['book', 'borrow'],
         }),
+        // Get Borrow Book Summary
+        getBorrowSummary: builder.query<BorrowSummary, void>({
+            query: () => "/borrow",
+            providesTags: ['book', "borrow"],
+        }),
     }),
 });
 
-export const { useBorrowBookMutation } = borrowApi
+export const { useBorrowBookMutation, useGetBorrowSummaryQuery } = borrowApi

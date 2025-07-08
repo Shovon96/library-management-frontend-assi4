@@ -36,7 +36,7 @@ export default function BorrowModal({
 
     try {
       await borrowBook({
-        book,
+        book: book,
         quantity: data.quantity,
         dueDate: data.date,
       }).unwrap();
