@@ -33,7 +33,7 @@ export const baseApi = createApi({
         // Get Specific book
         getBook: builder.query({
             query: (id) => `/books/${id}`,
-            providesTags: (id) => [{ type: "book", id }],
+            providesTags: (id) => [{ type: "book", id }, 'borrow'],
         }),
         // Update Specific book query request
         updateBook: builder.mutation({

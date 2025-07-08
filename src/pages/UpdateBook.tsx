@@ -17,6 +17,7 @@ import Loader from "@/layoutComponents/Loader";
 import { bookZodSchema, type IBook } from "@/model/bookModel";
 import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function EditBookForm() {
     const { id } = useParams<{ id: string }>();
@@ -55,7 +56,7 @@ export default function EditBookForm() {
 
     return (
         <>
-        <h1 className="text-2xl font-bold my-5 text-center">Update <span className="text-blue-600">{book?.data?.title}</span> Book</h1>
+            <h1 className="text-2xl font-bold my-5 text-center">Update <span className="text-blue-600">{book?.data?.title}</span> Book</h1>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-lg mx-auto p-4">
                     <FormField
@@ -107,12 +108,28 @@ export default function EditBookForm() {
                             <FormItem>
                                 <FormLabel>Genre</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Genre" {...field} defaultValue={book?.data?.genre} />
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                        defaultValue={book?.data?.genre}
+                                    >
+                                        <SelectTrigger className="w-auto">
+                                            <SelectValue placeholder="Choose genre" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {["FICTION", "NON_FICTION", "HISTORY", "SCIENCE", "BIOGRAPHY", "FANTASY"].map((g) => (
+                                                <SelectItem key={g} value={g}>
+                                                    {g}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
 
                     <FormField
                         control={form.control}

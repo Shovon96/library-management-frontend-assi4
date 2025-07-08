@@ -1,6 +1,7 @@
 import App from "@/App";
 import AddBooks from "@/pages/AddBook";
 import AllBooks from "@/pages/AllBooks";
+import BookDetails from "@/pages/BookDetails";
 import ErrorRouter from "@/pages/errorPage/ErrorRouter";
 import Home from "@/pages/Home";
 import UpdateBook from "@/pages/UpdateBook";
@@ -26,9 +27,13 @@ export const router = createBrowserRouter([
         element: <AllBooks />
       },
       {
-        path: "/books/:id",
+        path: "/edit-book/:id",
         element: <UpdateBook />
-      }
+      },
+      {
+        path: "/books/:id",
+        element: <BookDetails />
+      },
     ]
   },
 ]);
