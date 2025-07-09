@@ -2,7 +2,7 @@ import App from "@/App";
 import AddBooks from "@/pages/AddBook";
 import AllBooks from "@/pages/AllBooks";
 import BookDetails from "@/pages/BookDetails";
-import BorrowSummery from "@/pages/BorrowSummery";
+import BorrowSummery from "@/pages/BorrowSummary";
 import ErrorRouter from "@/pages/errorPage/ErrorRouter";
 import Home from "@/pages/Home";
 import UpdateBook from "@/pages/UpdateBook";

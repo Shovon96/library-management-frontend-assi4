@@ -23,8 +23,8 @@ export default function BorrowSummaryTable() {
                     <TableRow className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
                         <TableHead className="text-white font-semibold px-4 py-3 text-lg">Sl</TableHead>
                         <TableHead className="text-white font-semibold px-4 py-3 text-lg">Book Title</TableHead>
-                        <TableHead className="text-white font-semibold px-4 py-3 text-lg">ISBN Number</TableHead>
-                        <TableHead className="text-white font-semibold px-4 py-3 text-lg">Borrowed Book Quantity</TableHead>
+                        <TableHead className="text-white font-semibold px-4 py-3 text-lg">ISBN</TableHead>
+                        <TableHead className="text-white font-semibold px-4 py-3 text-lg">Total Quantity Borrowed</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

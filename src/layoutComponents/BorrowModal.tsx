@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useBorrowBookMutation } from "@/redux/api/borrowApi";
+import { useNavigate } from "react-router-dom";
 
 type BorrowFormData = {
   quantity: number;
@@ -26,7 +27,8 @@ export default function BorrowModal({
   book,
 }: BorrowModalProps) {
   const { register, handleSubmit, reset } = useForm<BorrowFormData>();
-  const [borrowBook, { isLoading }] = useBorrowBookMutation();
+  const [borrowBook] = useBorrowBookMutation();
+  const navigate = useNavigate()
 
   const submitHandler = async (data: BorrowFormData) => {
     if (data.quantity > availableQuantity) {
@@ -44,6 +46,7 @@ export default function BorrowModal({
       onSubmit(data)
       reset();
       onClose();
+      navigate('/borrow-summary')
     } catch (error: any) {
       console.error("Borrow failed", error);
       toast.error("Failed to borrow book!");

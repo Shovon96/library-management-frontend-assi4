@@ -21,8 +21,12 @@ export default function AllBooks() {
     sortBy,
     sort: sortOrder,
     page,
-    limit
+    limit,
   });
+
+  const dataCount = page * limit
+  const isNext = data?.total > dataCount
+  // console.log(dataCount)
 
   // Delete Mutation for delete a book
   const [deleteBook] = useDeleteBookMutation()
@@ -38,7 +42,6 @@ export default function AllBooks() {
   };
 
   const columns = ["Sl", "Title", "Author", "Genre", "ISBN", "Copies", "Description", "Status", "Actions"];
-
 
   // For Modal open
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,11 +107,11 @@ export default function AllBooks() {
             <TableRow key={book._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell className="font-medium hover:underline" title="view details">
-              <Link to={`/books/${book?._id}`}>
-                {book.title.length > 28
-                  ? `${book.title.slice(0, 28)}....`
-                  : book.title}
-              </Link>
+                <Link to={`/books/${book?._id}`}>
+                  {book.title.length > 28
+                    ? `${book.title.slice(0, 28)}....`
+                    : book.title}
+                </Link>
               </TableCell>
               <TableCell>{book.author}</TableCell>
               <TableCell>{book.genre}</TableCell>
@@ -129,12 +132,12 @@ export default function AllBooks() {
                   <Link to={`/edit-book/${book._id}`}><Button size="sm" className="bg-yellow-500 cursor-pointer">Edit</Button></Link>
                   <Button onClick={() => deleteBookSubmit(book._id)} className="cursor-pointer" size="sm" variant="destructive">Delete</Button>
                   {/* <Button size="sm" disabled={!book.copies}>Borrow</Button> */}
-                    <Button 
+                  <Button
                     size="sm"
-                    className="cursor-pointer bg-blue-500" 
+                    className="cursor-pointer bg-blue-500"
                     onClick={() => openModal(book)}
                     disabled={!book.copies}
-                    >Borrow</Button>
+                  >Borrow</Button>
                 </div>
               </TableCell>
             </TableRow>
@@ -155,6 +158,7 @@ export default function AllBooks() {
         <Button
           variant="outline"
           onClick={() => setPage((prev) => prev + 1)}
+          disabled={!isNext}
         >
           Next
         </Button>
