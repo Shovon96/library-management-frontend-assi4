@@ -3,6 +3,7 @@ import AddBooks from "@/pages/AddBook";
 import AllBooks from "@/pages/AllBooks";
 import BookDetails from "@/pages/BookDetails";
 import BorrowSummery from "@/pages/BorrowSummary";
+import Contact from "@/pages/Contact";
 import ErrorRouter from "@/pages/errorPage/ErrorRouter";
 import Home from "@/pages/Home";
 import UpdateBook from "@/pages/UpdateBook";
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: "/borrow-summary",
         element: <BorrowSummery />
+      },
+      {
+        path: "/contact",
+        element: <Contact />
       }
     ]
   },
